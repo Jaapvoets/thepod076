@@ -1,73 +1,79 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Pod 076</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Pod 076</title>
 
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      height: 100vh;
-      overflow: hidden;
-      font-family: system-ui, Arial, sans-serif;
-      background: black;
-    }
+body {
+  height: 100vh;
+  overflow: hidden;
+  font-family: system-ui, Arial, sans-serif;
+  background: black;
+}
 
-    .slideshow {
-      position: fixed;
-      width: 100%;
-      height: 100vh;
-      top: 0;
-      left: 0;
-    }
+.slide {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
 
-    .slideshow img {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 1.5s ease-in-out;
-    }
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
 
-    .slideshow img.active {
-      opacity: 1;
-    }
+/* Afbeeldingen fullscreen */
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    .top-right-text {
-      position: fixed;
-      top: 40px;
-      right: 50px;
-      color: white;
-      font-size: 48px;
-      font-weight: 700;
-      z-index: 10;
-      letter-spacing: 1px;
-    }
-  </style>
+/* Zwarte slide */
+.black-slide {
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 72px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+</style>
 </head>
 <body>
 
-  <div class="slideshow">
-    <img src="bg1.jpg" class="active">
-    <img src="bg2.jpg">
-    <img src="bg3.jpg">
-  </div>
+<div class="slide active">
+  <img src="bg1.jpg" alt="">
+</div>
 
-  <div class="top-right-text">Q1 2027</div>
+<div class="slide">
+  <img src="bg2.jpg" alt="">
+</div>
 
-  <script>
-    const slides = document.querySelectorAll(".slideshow img");
-    let current = 0;
+<div class="slide black-slide">
+  Q1 2027
+</div>
 
-    setInterval(() => {
-      slides[current].classList.remove("active");
-      current = (current + 1) % slides.length;
-      slides[current].classList.add("active");
-    }, 4000); // wisselt elke 4 seconden
-  </script>
+<script>
+const slides = document.querySelectorAll(".slide");
+let current = 0;
+
+setInterval(() => {
+  slides[current].classList.remove("active");
+  current = (current + 1) % slides.length;
+  slides[current].classList.add("active");
+}, 4000); // wisselt elke 4 seconden
+</script>
 
 </body>
 </html>
