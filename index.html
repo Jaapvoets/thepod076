@@ -30,8 +30,16 @@ body {
   z-index: 1;
 }
 
-/* Afbeeldingen fullscreen */
-.slide img {
+/* Slide 1 minder beeldvullend */
+.slide.first img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* past volledig in beeld */
+  background: black;
+}
+
+/* Slide 2 volledig fullscreen */
+.slide.second img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -52,11 +60,11 @@ body {
 </head>
 <body>
 
-<div class="slide active">
+<div class="slide first active">
   <img src="bg1.jpg" alt="">
 </div>
 
-<div class="slide">
+<div class="slide second">
   <img src="bg2.jpg" alt="">
 </div>
 
@@ -68,11 +76,21 @@ body {
 const slides = document.querySelectorAll(".slide");
 let current = 0;
 
-setInterval(() => {
+/* verschillende tijden per slide */
+const timings = [3000, 3000, 6000]; 
+// slide 1 = 3 sec
+// slide 2 = 3 sec
+// slide 3 = 6 sec
+
+function nextSlide() {
   slides[current].classList.remove("active");
   current = (current + 1) % slides.length;
   slides[current].classList.add("active");
-}, 4000); // wisselt elke 4 seconden
+
+  setTimeout(nextSlide, timings[current]);
+}
+
+setTimeout(nextSlide, timings[current]);
 </script>
 
 </body>
