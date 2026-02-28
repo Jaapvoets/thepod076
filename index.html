@@ -22,7 +22,7 @@ body {
   top: 0;
   left: 0;
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity 3s ease-in-out; /* LANGZAMERE FADE */
 }
 
 .slide.active {
@@ -30,19 +30,11 @@ body {
   z-index: 1;
 }
 
-/* Slide 1 minder beeldvullend */
-.slide.first img {
+/* Beide afbeeldingen volledig beeldvullend */
+.slide img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  background: black;
-}
-
-/* Slide 2 fullscreen */
-.slide.second img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* vult volledig scherm */
 }
 
 /* Zwarte slide */
@@ -56,16 +48,16 @@ body {
 /* Grote typemachine tekst */
 .typewriter {
   color: white;
-  font-size: 120px;
+  font-size: 140px;
   font-weight: 800;
-  letter-spacing: 4px;
+  letter-spacing: 6px;
   white-space: nowrap;
   border-right: 4px solid white;
-  padding-right: 10px;
+  padding-right: 12px;
   animation: blink 1s infinite;
 }
 
-/* Knipperende cursor */
+/* Cursor knipper */
 @keyframes blink {
   0%, 50%, 100% { border-color: white; }
   25%, 75% { border-color: transparent; }
@@ -74,11 +66,11 @@ body {
 </head>
 <body>
 
-<div class="slide first active">
+<div class="slide active">
   <img src="bg1.jpg" alt="">
 </div>
 
-<div class="slide second">
+<div class="slide">
   <img src="bg2.jpg" alt="">
 </div>
 
@@ -90,7 +82,9 @@ body {
 const slides = document.querySelectorAll(".slide");
 let current = 0;
 
-const timings = [3000, 3000, 7000];
+/* Langere weergave tijden */
+const timings = [5000, 5000, 9000]; 
+// 5 sec, 5 sec, 9 sec
 
 function nextSlide() {
   slides[current].classList.remove("active");
@@ -106,9 +100,9 @@ function nextSlide() {
 
 setTimeout(nextSlide, timings[current]);
 
-/* Typemachine effect */
+/* Typemachine */
 const text = "Q1 2027";
-const typingSpeed = 150;
+const typingSpeed = 180;
 let index = 0;
 let typingStarted = false;
 
