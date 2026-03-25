@@ -1,138 +1,140 @@
 <!doctype html>
 <html lang="nl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The Pod 076</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Pod 076</title>
 
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-  height: 100vh;
-  overflow: hidden;
-  font-family: system-ui, Arial, sans-serif;
-  background: black;
-}
+    body {
+      height: 100vh;
+      overflow: hidden;
+      font-family: system-ui, Arial, sans-serif;
+      background: black;
+    }
 
-/* Image layer */
-.image-layer {
-  position: fixed;
-  inset: 0;
-  opacity: 1;
-  transition: opacity 1s ease-in-out;
-}
+    .image-layer {
+      position: fixed;
+      inset: 0;
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+      background: black;
+    }
 
-.image-layer.fade {
-  opacity: 0;
-}
+    .image-layer.fade {
+      opacity: 0;
+    }
 
-/* Desktop afbeelding */
-.image-layer img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+    .image-layer picture,
+    .image-layer img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
 
-/* 📱 Mobiel: andere afbeelding */
-@media (max-width: 768px) {
-  .image-layer img {
-    content: url("bg-mobile.jpg");
-    object-fit: cover;
-  }
-}
+    .image-layer img {
+      object-fit: cover;
+    }
 
-/* Black screen */
-.black-layer {
-  position: fixed;
-  inset: 0;
-  background: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-}
+    .black-layer {
+      position: fixed;
+      inset: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+    }
 
-.black-layer.active {
-  opacity: 1;
-}
+    .black-layer.active {
+      opacity: 1;
+    }
 
-/* Typemachine */
-.typewriter {
-  color: white;
-  font-size: clamp(80px, 12vw, 160px);
-  font-weight: 900;
-  letter-spacing: 6px;
-  border-right: 4px solid white;
-  padding-right: 12px;
-  white-space: nowrap;
-  animation: blink 1s infinite;
-}
+    .typewriter {
+      color: white;
+      font-size: clamp(56px, 12vw, 160px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      border-right: 4px solid white;
+      padding-right: 12px;
+      white-space: nowrap;
+      animation: blink 1s infinite;
+    }
 
-@keyframes blink {
-  0%, 50%, 100% { border-color: white; }
-  25%, 75% { border-color: transparent; }
-}
-</style>
+    @keyframes blink {
+      0%, 50%, 100% { border-color: white; }
+      25%, 75% { border-color: transparent; }
+    }
+
+    @media (max-width: 768px) {
+      .typewriter {
+        font-size: clamp(42px, 14vw, 80px);
+        letter-spacing: 3px;
+        padding-right: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="image-layer" id="imageLayer">
-  <img src="bg-desktop.jpg" alt="">
-</div>
+  <div class="image-layer" id="imageLayer">
+    <picture>
+      <source media="(max-width: 768px)" srcset="bg-mobile.jpg">
+      <img src="bg-desktop.jpg" alt="The Pod 076">
+    </picture>
+  </div>
 
-<div class="black-layer" id="blackLayer">
-  <div class="typewriter" id="text"></div>
-</div>
+  <div class="black-layer" id="blackLayer">
+    <div class="typewriter" id="text"></div>
+  </div>
 
-<script>
-const imageLayer = document.getElementById("imageLayer");
-const blackLayer = document.getElementById("blackLayer");
+  <script>
+    const imageLayer = document.getElementById("imageLayer");
+    const blackLayer = document.getElementById("blackLayer");
+    const text = "Q1 2027";
 
-const text = "Q1 2027";
-
-function startLoop() {
-
-  setTimeout(() => {
-    imageLayer.classList.add("fade");
-
-    setTimeout(() => {
-      blackLayer.classList.add("active");
-      startTyping();
-
+    function startLoop() {
       setTimeout(() => {
-        resetScene();
-        startLoop();
-      }, 5000);
+        imageLayer.classList.add("fade");
 
-    }, 1000);
+        setTimeout(() => {
+          blackLayer.classList.add("active");
+          startTyping();
 
-  }, 4000);
-}
-
-function startTyping() {
-  const el = document.getElementById("text");
-  el.textContent = "";
-  let i = 0;
-
-  function type() {
-    if (i < text.length) {
-      el.textContent += text.charAt(i);
-      i++;
-      setTimeout(type, 150);
+          setTimeout(() => {
+            resetScene();
+            startLoop();
+          }, 5000);
+        }, 1000);
+      }, 4000);
     }
-  }
 
-  type();
-}
+    function startTyping() {
+      const el = document.getElementById("text");
+      el.textContent = "";
+      let i = 0;
 
-function resetScene() {
-  blackLayer.classList.remove("active");
-  imageLayer.classList.remove("fade");
-}
+      function type() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, 150);
+        }
+      }
 
-startLoop();
-</script>
+      type();
+    }
+
+    function resetScene() {
+      blackLayer.classList.remove("active");
+      imageLayer.classList.remove("fade");
+    }
+
+    startLoop();
+  </script>
 
 </body>
 </html>
