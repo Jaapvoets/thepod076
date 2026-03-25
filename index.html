@@ -19,84 +19,38 @@ body {
 .slide {
   position: fixed;
   inset: 0;
-  opacity: 0;
-  transition: opacity 3.5s ease-in-out; /* super smooth */
-  background: black;
+  display: none;
 }
 
 .slide.active {
-  opacity: 1;
-  z-index: 1;
+  display: block;
 }
 
-/* Afbeeldingen fullscreen */
+/* Afbeelding fullscreen */
 .slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1);
-}
-
-/* Cinematic slow zoom (Ken Burns) alleen als slide actief is */
-.slide.active img {
-  animation: kenburns 10s ease-in-out forwards;
-}
-
-@keyframes kenburns {
-  0%   { transform: scale(1.02); }
-  100% { transform: scale(1.10); }
-}
-
-/* Subtiele dark overlay voor luxe look */
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.18);
-  pointer-events: none;
-}
-
-/* Fade-to-black layer */
-.fadeToBlack {
-  position: fixed;
-  inset: 0;
-  background: black;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 2.8s ease-in-out;
-  z-index: 5;
-}
-.fadeToBlack.on {
-  opacity: 1;
 }
 
 /* Zwarte slide */
 .black-slide {
+  background: black;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Typewriter tekst */
-.typewrap {
-  transform: scale(0.96);
-  opacity: 0.85;
-  transition: transform 1.6s ease, opacity 1.6s ease;
-}
-.black-slide.active .typewrap {
-  transform: scale(1);
-  opacity: 1;
-}
-
+/* Typemachine */
 .typewriter {
   color: white;
-  font-size: clamp(72px, 10vw, 160px);
-  font-weight: 850;
+  font-size: clamp(80px, 12vw, 160px);
+  font-weight: 900;
   letter-spacing: 6px;
-  white-space: nowrap;
   border-right: 4px solid white;
-  padding-right: 14px;
+  padding-right: 12px;
+  white-space: nowrap;
   animation: blink 1s infinite;
-  text-transform: uppercase;
 }
 
 @keyframes blink {
@@ -107,91 +61,42 @@ body {
 </head>
 <body>
 
-<!-- Slide 1 -->
+<!-- Slide 1 (afbeelding 2) -->
 <div class="slide active">
-  <img src="bg1.jpg" alt="">
-  <div class="overlay"></div>
-</div>
-
-<!-- Slide 2 -->
-<div class="slide">
   <img src="bg2.jpg" alt="">
-  <div class="overlay"></div>
 </div>
 
-<!-- Slide 3 (zwart + tekst) -->
-<div class="slide black-slide">
-  <div class="typewrap">
-    <div class="typewriter" id="typeText"></div>
-  </div>
+<!-- Slide 2 (zwart + tekst) -->
+<div class="slide black-slide" id="blackSlide">
+  <div class="typewriter" id="text"></div>
 </div>
-
-<!-- Fade naar zwart vóór de tekst-slide -->
-<div class="fadeToBlack" id="fadeToBlack"></div>
 
 <script>
 const slides = document.querySelectorAll(".slide");
-const fadeLayer = document.getElementById("fadeToBlack");
 
-let current = 0;
+/* Na 4 seconden harde cut */
+setTimeout(() => {
+  slides[0].classList.remove("active");
+  slides[1].classList.add("active");
+  startTyping();
+}, 4000);
 
-/* Timing (langzaam & luxe) */
-const timings = [6500, 6500, 12000];     // hoelang elke slide in beeld blijft
-const fadeToBlackBefore = 1200;          // wanneer fade-to-black start vóór slide 3
-const fadeToBlackDuration = 2800;        // matcht CSS transition ~2.8s
-
-function goTo(nextIndex) {
-  slides[current].classList.remove("active");
-  current = nextIndex;
-  slides[current].classList.add("active");
-
-  // start typing wanneer we bij zwart scherm komen
-  if (slides[current].classList.contains("black-slide")) {
-    startTyping();
-  }
-}
-
-function scheduleNext() {
-  const isGoingToBlackSlide = ((current + 1) % slides.length) === 2;
-
-  // Als we richting zwarte slide gaan: eerst even elegant naar zwart faden
-  if (isGoingToBlackSlide) {
-    setTimeout(() => fadeLayer.classList.add("on"), timings[current] - fadeToBlackBefore);
-    setTimeout(() => {
-      goTo(2);
-      // fade-layer weer uit zodat het niet over de zwarte slide blijft hangen
-      setTimeout(() => fadeLayer.classList.remove("on"), 200);
-      scheduleNext();
-    }, timings[current]); // switch precies op het einde van de huidige slide
-  } else {
-    setTimeout(() => {
-      goTo((current + 1) % slides.length);
-      scheduleNext();
-    }, timings[current]);
-  }
-}
-
-// Start loop
-scheduleNext();
-
-/* Typemachine (reset elke keer als hij opnieuw op zwart komt) */
+/* Typemachine */
 const text = "Q1 2027";
-const typingSpeed = 170;
+let i = 0;
 
 function startTyping() {
-  const el = document.getElementById("typeText");
-  el.textContent = "";
-  let i = 0;
+  const el = document.getElementById("text");
 
   function type() {
     if (i < text.length) {
       el.textContent += text.charAt(i);
       i++;
-      setTimeout(type, typingSpeed);
+      setTimeout(type, 150);
     }
   }
-  // mini pauze voor drama
-  setTimeout(type, 500);
+
+  type();
 }
 </script>
 
