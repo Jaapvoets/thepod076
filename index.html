@@ -1,136 +1,136 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Pod 076</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Pod 076</title>
 
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      height: 100vh;
-      overflow: hidden;
-      font-family: system-ui, Arial, sans-serif;
-      background: black;
-    }
+body {
+  height: 100vh;
+  overflow: hidden;
+  font-family: system-ui, Arial, sans-serif;
+  background: black;
+}
 
-    .image-layer {
-      position: fixed;
-      inset: 0;
-      opacity: 1;
-      transition: opacity 1s ease-in-out;
-      background-image: url("bg-desktop.jpg");
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-color: black;
-    }
+/* Image layer */
+.image-layer {
+  position: fixed;
+  inset: 0;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+  background-image: url("bg2.jpg"); /* ✅ jouw bestand */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
-    .image-layer.fade {
-      opacity: 0;
-    }
+.image-layer.fade {
+  opacity: 0;
+}
 
-    @media (max-width: 768px) {
-      .image-layer {
-        background-image: url("bg-mobile.jpg");
-        background-size: cover;
-        background-position: center center;
-      }
-    }
+/* 📱 Mobiel fix (geen crop) */
+@media (max-width: 768px) {
+  .image-layer {
+    background-size: contain;
+    background-color: black;
+  }
+}
 
-    .black-layer {
-      position: fixed;
-      inset: 0;
-      background: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-    }
+/* Black screen */
+.black-layer {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+}
 
-    .black-layer.active {
-      opacity: 1;
-    }
+.black-layer.active {
+  opacity: 1;
+}
 
-    .typewriter {
-      color: white;
-      font-size: clamp(56px, 12vw, 160px);
-      font-weight: 900;
-      letter-spacing: 6px;
-      border-right: 4px solid white;
-      padding-right: 12px;
-      white-space: nowrap;
-      animation: blink 1s infinite;
-    }
+/* Typemachine */
+.typewriter {
+  color: white;
+  font-size: clamp(60px, 12vw, 140px);
+  font-weight: 900;
+  letter-spacing: 6px;
+  border-right: 4px solid white;
+  padding-right: 12px;
+  white-space: nowrap;
+  animation: blink 1s infinite;
+}
 
-    @keyframes blink {
-      0%, 50%, 100% { border-color: white; }
-      25%, 75% { border-color: transparent; }
-    }
-
-    @media (max-width: 768px) {
-      .typewriter {
-        font-size: clamp(42px, 14vw, 80px);
-        letter-spacing: 3px;
-        padding-right: 8px;
-      }
-    }
-  </style>
+@keyframes blink {
+  0%, 50%, 100% { border-color: white; }
+  25%, 75% { border-color: transparent; }
+}
+</style>
 </head>
 <body>
 
-  <div class="image-layer" id="imageLayer"></div>
+<div class="image-layer" id="imageLayer"></div>
 
-  <div class="black-layer" id="blackLayer">
-    <div class="typewriter" id="text"></div>
-  </div>
+<div class="black-layer" id="blackLayer">
+  <div class="typewriter" id="text"></div>
+</div>
 
-  <script>
-    const imageLayer = document.getElementById("imageLayer");
-    const blackLayer = document.getElementById("blackLayer");
-    const text = "Q1 2027";
+<script>
+const imageLayer = document.getElementById("imageLayer");
+const blackLayer = document.getElementById("blackLayer");
 
-    function startLoop() {
+const text = "Q1 2027";
+
+function startLoop() {
+
+  // 1. Afbeelding 4 sec
+  setTimeout(() => {
+    imageLayer.classList.add("fade");
+
+    // 2. Fade naar zwart (1 sec)
+    setTimeout(() => {
+      blackLayer.classList.add("active");
+      startTyping();
+
+      // 3. 5 sec tekst → terug naar afbeelding
       setTimeout(() => {
-        imageLayer.classList.add("fade");
+        resetScene();
+        startLoop();
+      }, 5000);
 
-        setTimeout(() => {
-          blackLayer.classList.add("active");
-          startTyping();
+    }, 1000);
 
-          setTimeout(() => {
-            resetScene();
-            startLoop();
-          }, 5000);
-        }, 1000);
-      }, 4000);
+  }, 4000);
+}
+
+function startTyping() {
+  const el = document.getElementById("text");
+  el.textContent = "";
+  let i = 0;
+
+  function type() {
+    if (i < text.length) {
+      el.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, 150);
     }
+  }
 
-    function startTyping() {
-      const el = document.getElementById("text");
-      el.textContent = "";
-      let i = 0;
+  type();
+}
 
-      function type() {
-        if (i < text.length) {
-          el.textContent += text.charAt(i);
-          i++;
-          setTimeout(type, 150);
-        }
-      }
+function resetScene() {
+  blackLayer.classList.remove("active");
+  imageLayer.classList.remove("fade");
+}
 
-      type();
-    }
-
-    function resetScene() {
-      blackLayer.classList.remove("active");
-      imageLayer.classList.remove("fade");
-    }
-
-    startLoop();
-  </script>
+startLoop();
+</script>
 
 </body>
 </html>
