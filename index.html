@@ -15,33 +15,37 @@ body {
   background: black;
 }
 
-.slide {
+/* Image layer */
+.image-layer {
   position: fixed;
   inset: 0;
-  display: none;
+  opacity: 1;
+  transition: opacity 1s ease-in-out; /* fade 1 seconde */
 }
 
-.slide.active {
-  display: block;
+.image-layer.fade {
+  opacity: 0;
 }
 
-/* Afbeelding fullscreen */
-.slide img {
+.image-layer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Zwarte slide standaard verborgen */
-.black-slide {
+/* Black + text */
+.black-layer {
+  position: fixed;
+  inset: 0;
   background: black;
-}
-
-/* Alleen zichtbaar als actief */
-.black-slide.active {
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 0;
+}
+
+.black-layer.active {
+  opacity: 1;
 }
 
 /* Typemachine */
@@ -64,32 +68,45 @@ body {
 </head>
 <body>
 
-<!-- Eerst afbeelding -->
-<div class="slide active" id="imageSlide">
+<div class="image-layer" id="imageLayer">
   <img src="bg2.jpg" alt="">
 </div>
 
-<!-- Daarna zwart scherm -->
-<div class="slide black-slide" id="blackSlide">
+<div class="black-layer" id="blackLayer">
   <div class="typewriter" id="text"></div>
 </div>
 
 <script>
-const imageSlide = document.getElementById("imageSlide");
-const blackSlide = document.getElementById("blackSlide");
-
-setTimeout(() => {
-  imageSlide.classList.remove("active");
-  blackSlide.classList.add("active");
-  startTyping();
-}, 4000);
+const imageLayer = document.getElementById("imageLayer");
+const blackLayer = document.getElementById("blackLayer");
 
 const text = "Q1 2027";
-let i = 0;
+
+function startLoop() {
+  // 1. Na 4 sec → fade naar zwart
+  setTimeout(() => {
+    imageLayer.classList.add("fade");
+
+    // 2. Na fade (1 sec) → zwart + tekst
+    setTimeout(() => {
+      blackLayer.classList.add("active");
+      startTyping();
+
+      // 3. Na 5 sec → harde cut terug
+      setTimeout(() => {
+        resetScene();
+        startLoop(); // opnieuw starten
+      }, 5000);
+
+    }, 1000);
+
+  }, 4000);
+}
 
 function startTyping() {
   const el = document.getElementById("text");
   el.textContent = "";
+  let i = 0;
 
   function type() {
     if (i < text.length) {
@@ -101,6 +118,14 @@ function startTyping() {
 
   type();
 }
+
+function resetScene() {
+  // harde reset
+  blackLayer.classList.remove("active");
+  imageLayer.classList.remove("fade");
+}
+
+startLoop();
 </script>
 
 </body>
