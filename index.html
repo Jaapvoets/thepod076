@@ -15,7 +15,6 @@ body {
   background: black;
 }
 
-/* Slides */
 .slide {
   position: fixed;
   inset: 0;
@@ -33,9 +32,13 @@ body {
   object-fit: cover;
 }
 
-/* Zwarte slide */
+/* Zwarte slide standaard verborgen */
 .black-slide {
   background: black;
+}
+
+/* Alleen zichtbaar als actief */
+.black-slide.active {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,32 +64,32 @@ body {
 </head>
 <body>
 
-<!-- Slide 1 (afbeelding 2) -->
-<div class="slide active">
+<!-- Eerst afbeelding -->
+<div class="slide active" id="imageSlide">
   <img src="bg2.jpg" alt="">
 </div>
 
-<!-- Slide 2 (zwart + tekst) -->
+<!-- Daarna zwart scherm -->
 <div class="slide black-slide" id="blackSlide">
   <div class="typewriter" id="text"></div>
 </div>
 
 <script>
-const slides = document.querySelectorAll(".slide");
+const imageSlide = document.getElementById("imageSlide");
+const blackSlide = document.getElementById("blackSlide");
 
-/* Na 4 seconden harde cut */
 setTimeout(() => {
-  slides[0].classList.remove("active");
-  slides[1].classList.add("active");
+  imageSlide.classList.remove("active");
+  blackSlide.classList.add("active");
   startTyping();
 }, 4000);
 
-/* Typemachine */
 const text = "Q1 2027";
 let i = 0;
 
 function startTyping() {
   const el = document.getElementById("text");
+  el.textContent = "";
 
   function type() {
     if (i < text.length) {
