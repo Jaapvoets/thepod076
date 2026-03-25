@@ -20,20 +20,29 @@ body {
   position: fixed;
   inset: 0;
   opacity: 1;
-  transition: opacity 1s ease-in-out; /* fade 1 seconde */
+  transition: opacity 1s ease-in-out;
 }
 
 .image-layer.fade {
   opacity: 0;
 }
 
+/* Desktop */
 .image-layer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Black + text */
+/* 📱 Mobiel fix (geen crop) */
+@media (max-width: 768px) {
+  .image-layer img {
+    object-fit: contain;
+    background: black;
+  }
+}
+
+/* Black screen */
 .black-layer {
   position: fixed;
   inset: 0;
@@ -83,19 +92,20 @@ const blackLayer = document.getElementById("blackLayer");
 const text = "Q1 2027";
 
 function startLoop() {
-  // 1. Na 4 sec → fade naar zwart
+
+  // 1. Toon afbeelding 4 sec
   setTimeout(() => {
     imageLayer.classList.add("fade");
 
-    // 2. Na fade (1 sec) → zwart + tekst
+    // 2. Fade naar zwart (1 sec)
     setTimeout(() => {
       blackLayer.classList.add("active");
       startTyping();
 
-      // 3. Na 5 sec → harde cut terug
+      // 3. Na 5 sec → terug naar afbeelding (hard cut)
       setTimeout(() => {
         resetScene();
-        startLoop(); // opnieuw starten
+        startLoop();
       }, 5000);
 
     }, 1000);
@@ -120,7 +130,6 @@ function startTyping() {
 }
 
 function resetScene() {
-  // harde reset
   blackLayer.classList.remove("active");
   imageLayer.classList.remove("fade");
 }
