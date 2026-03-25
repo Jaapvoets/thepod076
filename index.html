@@ -27,18 +27,18 @@ body {
   opacity: 0;
 }
 
-/* Desktop */
+/* Desktop afbeelding */
 .image-layer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* 📱 Mobiel fix (geen crop) */
+/* 📱 Mobiel: andere afbeelding */
 @media (max-width: 768px) {
   .image-layer img {
-    object-fit: contain;
-    background: black;
+    content: url("bg-mobile.jpg");
+    object-fit: cover;
   }
 }
 
@@ -78,7 +78,7 @@ body {
 <body>
 
 <div class="image-layer" id="imageLayer">
-  <img src="bg2.jpg" alt="">
+  <img src="bg-desktop.jpg" alt="">
 </div>
 
 <div class="black-layer" id="blackLayer">
@@ -93,16 +93,13 @@ const text = "Q1 2027";
 
 function startLoop() {
 
-  // 1. Toon afbeelding 4 sec
   setTimeout(() => {
     imageLayer.classList.add("fade");
 
-    // 2. Fade naar zwart (1 sec)
     setTimeout(() => {
       blackLayer.classList.add("active");
       startTyping();
 
-      // 3. Na 5 sec → terug naar afbeelding (hard cut)
       setTimeout(() => {
         resetScene();
         startLoop();
