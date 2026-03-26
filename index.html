@@ -21,22 +21,23 @@ body {
   inset: 0;
   opacity: 1;
   transition: opacity 1s ease-in-out;
-  background-image: url("bg2.jpg"); /* ✅ jouw bestand */
+  background-image: url("bg2.jpg"); /* 🖥️ desktop */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.image-layer.fade {
-  opacity: 0;
-}
-
-/* 📱 Mobiel fix (geen crop) */
+/* 📱 mobiel */
 @media (max-width: 768px) {
   .image-layer {
-    background-size: contain;
-    background-color: black;
+    background-image: url("bg1.jpg"); /* 📱 mobiel */
+    background-size: cover;
+    background-position: center;
   }
+}
+
+.image-layer.fade {
+  opacity: 0;
 }
 
 /* Black screen */
@@ -66,6 +67,14 @@ body {
   animation: blink 1s infinite;
 }
 
+/* mobiel tekst iets kleiner */
+@media (max-width: 768px) {
+  .typewriter {
+    font-size: clamp(40px, 14vw, 80px);
+    letter-spacing: 3px;
+  }
+}
+
 @keyframes blink {
   0%, 50%, 100% { border-color: white; }
   25%, 75% { border-color: transparent; }
@@ -88,16 +97,16 @@ const text = "Q1 2027";
 
 function startLoop() {
 
-  // 1. Afbeelding 4 sec
+  // afbeelding zichtbaar
   setTimeout(() => {
     imageLayer.classList.add("fade");
 
-    // 2. Fade naar zwart (1 sec)
+    // fade naar zwart
     setTimeout(() => {
       blackLayer.classList.add("active");
       startTyping();
 
-      // 3. 5 sec tekst → terug naar afbeelding
+      // terug naar afbeelding
       setTimeout(() => {
         resetScene();
         startLoop();
